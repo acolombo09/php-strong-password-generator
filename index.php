@@ -1,107 +1,28 @@
 <!-- 
-nome repo: php-hotel
+nome repo: php-strong-password-generator
 Descrizione
-Partiamo da questo array di hotel. https://www.codepile.net/pile/OEWY7Q1G
-Stampare tutti i nostri hotel con tutti i dati disponibili.
-Iniziate in modo graduale.
-Prima stampate in pagina i dati, senza preoccuparvi dello stile.
-Dopo aggiungete Bootstrap e mostrate le informazioni con una tabella.
-Bonus:
-1 - Aggiungere un form ad inizio pagina che tramite una richiesta GET 
-permetta di filtrare gli hotel che hanno un parcheggio.
-2 - Aggiungere un secondo campo al form che permetta di filtrare gli hotel 
-per voto (es. inserisco 3 ed ottengo tutti gli hotel che hanno un voto 
-di tre stelle o superiore)
-NOTA: deve essere possibile utilizzare entrambi i filtri contemporaneamente 
-(es. ottenere una lista con hotel che dispongono di parcheggio e che 
-hanno un voto di tre stelle o superiore).
-Se non viene specificato nessun filtro, visualizzare come in precedenza tutti gli hotel. -->
+Dobbiamo creare una pagina che permetta ai nostri utenti di utilizzare 
+il nostro generatore di password (abbastanza) sicure.
+L’esercizio è suddiviso in varie milestone ed è molto importante svilupparle in modo ordinato.
+Milestone 1
+Creare un form che invii in GET la lunghezza della password. Una nostra funzione 
+utilizzerà questo dato per generare una password casuale 
+(composta da lettere, lettere maiuscole, numeri e simboli) da restituire all’utente.
+Scriviamo tutto (logica e layout) in un unico file index.php
+Milestone 2
+Verificato il corretto funzionamento del nostro codice, spostiamo la logica 
+in un file functions.php che includeremo poi nella pagina principale
+Milestone 3 (BONUS)
+Invece di visualizzare la password nella index, effettuare un redirect a
+d una pagina dedicata che tramite $_SESSION recupererà la password da mostrare all’utente.
+Milestone 4 (BONUS)
+Gestire ulteriori parametri per la password: quali caratteri usare fra numeri, lettere e simboli. 
+Possono essere scelti singolarmente (es. solo numeri) oppure possono essere 
+combinati fra loro (es. numeri e simboli, oppure tutti e tre insieme).
+Dare all’utente anche la possibilità di permettere o meno la ripetizione di caratteri uguali.
+-->
 
 <?php
-
-$hotels = [
-
-    [
-        'name' => 'Hotel Belvedere',
-        'description' => 'Hotel Belvedere Descrizione',
-        'parking' => true,
-        'vote' => 4,
-        'distance_to_center' => 10.4
-    ],
-    [
-        'name' => 'Hotel Futuro',
-        'description' => 'Hotel Futuro Descrizione',
-        'parking' => true,
-        'vote' => 2,
-        'distance_to_center' => 2
-    ],
-    [
-        'name' => 'Hotel Rivamare',
-        'description' => 'Hotel Rivamare Descrizione',
-        'parking' => false,
-        'vote' => 1,
-        'distance_to_center' => 1
-    ],
-    [
-        'name' => 'Hotel Bellavista',
-        'description' => 'Hotel Bellavista Descrizione',
-        'parking' => false,
-        'vote' => 5,
-        'distance_to_center' => 5.5
-    ],
-    [
-        'name' => 'Hotel Milano',
-        'description' => 'Hotel Milano Descrizione',
-        'parking' => true,
-        'vote' => 2,
-        'distance_to_center' => 50
-    ],
-
-];
-
-// $inputwords = $_POST["inputwords"] ?? null;
-// $censored = $_POST["censored"] ?? null;
-//   //daModificare,conCosa, stringa soggetto cioè quella sulla quale eseguire l'operazione richiesta
-// $result = str_replace($censored, '<span class="text-danger">***</span>', $inputwords);
-
-$filterVote = $_GET['vote'] ?? null;
-$filterParking = $_GET['parking'] ?? null;
-
-// consiglio di florian usare spesso il var_dump
-var_dump($filterParking);
-var_dump($filterVote);
-
-$filteredHotels = [];
-// se non ci sono filtri, inserisco tutti gli hotel nell'array filtrato
-if($filterParking === null && $filterVote === null){
-  $filteredHotels = $hotels;
-}else {
-  foreach($hotels as $hotel) {
-    if ($hotel['parking'] >= $filterParking){
-      $filteredHotels = $hotels;
-    }
-  }
-
-  // // soluzione multifiltro
-  // foreach($hotels as $hotel) {
-  //   $mustAdd = true;
-  //   // cambiare il valore di must add in base ai filtri
-  //   // ad ogni ciclo ho i dati di un hotel
-  //   // e devo decidere se pushare questi dati nell'array filtrato
-  //   if(isset($filterVote) && isset($filterPark)){
-  //     $mustadd = ($hotel['vote'] >= $filterVote && $hotel['parking'] == $filterParking);
-  //   }else if (isset($filterVote)) {
-  //     $mustAdd = ($hotel['vote'] >= $filterVote);
-  //   }else if (isset($filterParking)){
-  //     $mustAdd = ($hotel['parking'] >= $filterParking);
-  //   }
-
-  //   if ($mustAdd) {
-  //     $filteredHotels[] = $hotel;
-  //   }
-
-  // }
-}
 
 
 
@@ -124,70 +45,86 @@ if($filterParking === null && $filterVote === null){
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <!-- My css link -->
   <link rel="stylesheet" href="css/style.css">
-  <title>PHP HOTELS</title>
+  <title>PHP | STRONG PASSWORD GENERATOR</title>
 </head>
-<body class="bg-dark">
-  <div class="container my-5 py-4 bg-body-tertiary">
+<body class="bg-dark bg-opacity-75">
+  <div class="container my-5 py-4 bg-body-tertiary shadow-lg">
     <div class="row justify-content-center">
       <div class="col-6 d-flex flex-column justify-content-center mx-auto">
         <div class="col d-flex flex-column justify-content-center mx-auto">
           <img class="my-3 mx-auto" src="./imgs/vuejs-logo.png" alt="" width="90" height="75">
         </div>
-        <div class="col my-2">
-          <div class="w-25">
-            <select class="form-select">
-              <option selected>Parking</option>
-              <option value="1">Yes</option>
-              <option value="2">No</option>
-            </select>
+        <div class="col my-3 bg-success bg-opacity-25">
+          <div class="w-50 mx-auto d-flex flex-column justify-content-center align-items-center text-center">
+          <!-- Form per inviare il valore del range slider -->
+            <form method="GET" action="index.php">
+              <div class="my-3">
+                <label for="rangeSlider" class="form-label">Seleziona un valore:</label>
+                <input type="range" class="form-range" id="rangeSlider" name="slider" min="2" max="12" value="2">
+              </div>
+              <button type="submit" class="btn btn-success mb-2">Genera Password</button>
+            </form>
+
+            <?php
+            // Check del modulo quando il modulo è stato inviato
+            //w3school
+            if ($_SERVER["REQUEST_METHOD"] == "GET") {
+              $sliderValue = $_GET["slider"];
+              echo "<p>Valore selezionato: $sliderValue</p>";
+              if ($sliderValue >= 1 && $sliderValue <= 12) {
+                $charsAllowed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*_";
+                $password = substr(str_shuffle($charsAllowed), 0, $sliderValue);
+                echo '<p class="fw-bold">Password casuale generata:</p>';
+                echo '<p class="text-primary fw-bold display-6">' . $password . '</p>';
+              } else {
+                echo "Errore: La lunghezza della password deve essere compresa tra 1 e 12.";
+              };
+            }
+            ?>
           </div>
         </div>
-        <div class="col my-2">
+        <div class="col my-3">
           <div class="w-100 mx-auto">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
               <label class="form-check-label" for="flexCheckDefault">
-                Default checkbox
+                Lettere minuscole (abc)
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                Lettere maiuscole (ABC)
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                Numeri (123)
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                Simboli speciali (!#$)
               </label>
             </div>
           </div>
         </div>
 
-        <!-- tramite echo si stampano gli elementi  -->
-        <!-- creo lista in html -->
-        <!-- rimuovo gli elementi che non servono -->
-        <!-- inserisco il php nell'html -->
-        <!-- ciclo foreach su array hotels -->
-        <!-- riporto tutto in tabella -->
         <div class="col my-3">
           <div class="w-100 mx-auto">
             <table class="table table-hover">
-              <thead>
-                <tr>
-                  <!-- volendo si poteva usare la funzione php "array_keys($hotels[0]);"
-                      così che potevo stampare tutte le chiavi dell'array ed utilizzarlo
-                      per stampare dinamicamente le keys nelle intestazioni della table
-                  -->
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Parking</th>
-                  <th scope="col">Vote</th>
-                  <th scope="col">Distance to center</th>
-                </tr>
-              </thead>
               <tbody class="table-group-divider">
                 <?php foreach ($filteredHotels as $key => $hotel) { ?>
                   <tr>
                     <th scope="row"><?php echo $key + 1; ?></th>
-                    <!-- per accedere alla chiave, devo usare le parentesi quadre -->
                     <td><?php echo $hotel['name']; ?></td>
                     <td><?php echo $hotel['description']; ?></td>
                     <!-- se la chiave 'parking' nell'array $hotel è vera o falsa 
                     e restituisce 'Yes' se è vera e 'No' se è falsa. -->
                     <td><?php echo ($hotel['parking'] ? 'Yes' : 'No'); ?></td>
                     <td><?php echo $hotel['vote']; ?></td>
-                    <!-- mai usare il + per concatenare stringhe, solo il . va utilizzato -->
                     <td><?php echo $hotel['distance_to_center'] . " km"; ?></td>
                   </tr>
                 <?php } ?>
