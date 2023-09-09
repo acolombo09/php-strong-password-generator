@@ -25,7 +25,6 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
 <?php
 
 
-
 ?>
 
 <!DOCTYPE html>
@@ -64,22 +63,25 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
               </div>
               <button type="submit" class="btn btn-success mb-2">Genera Password</button>
             </form>
+            <div class="w-100 mx-auto">
+              <p class="fw-bold">Password casuale generata:</p>
+            </div>
 
             <?php
-            // Check del modulo quando il modulo è stato inviato
-            //w3school
-            if ($_SERVER["REQUEST_METHOD"] == "GET") {
-              $sliderValue = $_GET["slider"];
-              echo "<p>Valore selezionato: $sliderValue</p>";
-              if ($sliderValue >= 1 && $sliderValue <= 12) {
-                $charsAllowed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*_";
-                $password = substr(str_shuffle($charsAllowed), 0, $sliderValue);
-                echo '<p class="fw-bold">Password casuale generata:</p>';
-                echo '<p class="text-primary fw-bold display-6">' . $password . '</p>';
-              } else {
-                echo "Errore: La lunghezza della password deve essere compresa tra 1 e 12.";
-              };
-            }
+            
+            include __DIR__ .  "/functions.php";
+
+            $sliderValue = getSliderValue();
+            
+            if ($sliderValue >= 1 && $sliderValue <= 12) {
+              $password = generateRandomPassword($sliderValue);
+
+              echo '<p class="text-primary fw-bold display-6">' . $password . '</p>';
+            } elseif($sliderValue !== null) {
+              echo "Errore: La lunghezza della password deve essere compresa tra 1 e 12.";
+            };
+            
+            
             ?>
           </div>
         </div>
@@ -112,26 +114,6 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
           </div>
         </div>
 
-        <div class="col my-3">
-          <div class="w-100 mx-auto">
-            <table class="table table-hover">
-              <tbody class="table-group-divider">
-                <?php foreach ($filteredHotels as $key => $hotel) { ?>
-                  <tr>
-                    <th scope="row"><?php echo $key + 1; ?></th>
-                    <td><?php echo $hotel['name']; ?></td>
-                    <td><?php echo $hotel['description']; ?></td>
-                    <!-- se la chiave 'parking' nell'array $hotel è vera o falsa 
-                    e restituisce 'Yes' se è vera e 'No' se è falsa. -->
-                    <td><?php echo ($hotel['parking'] ? 'Yes' : 'No'); ?></td>
-                    <td><?php echo $hotel['vote']; ?></td>
-                    <td><?php echo $hotel['distance_to_center'] . " km"; ?></td>
-                  </tr>
-                <?php } ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
         <div class="col my-3">
           <div class="w-100 mx-auto">
             <p class="mt-3 text-body-secondary">© 2023</p>
