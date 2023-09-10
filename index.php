@@ -24,6 +24,7 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
 
 <?php
 
+session_start();
 
 ?>
 
@@ -61,11 +62,18 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
                 <label for="rangeSlider" class="form-label">Seleziona un valore:</label>
                 <input type="range" class="form-range" id="rangeSlider" name="slider" min="2" max="12" value="2">
               </div>
-              <button type="submit" class="btn btn-success mb-2">Genera Password</button>
+              <button type="submit" class="btn btn-success mb-2" name="button1" value="Button1">
+                Genera Password
+                <?php
+                  if(array_key_exists('button1', $_GET)) {
+                    button1();
+                  }
+                  function button1() {
+                    header('Location: ./private_area.php');
+                  }
+                ?>
+              </button>
             </form>
-            <div class="w-100 mx-auto">
-              <p class="fw-bold">Password casuale generata:</p>
-            </div>
 
             <?php
             
@@ -81,7 +89,7 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
               echo "Errore: La lunghezza della password deve essere compresa tra 1 e 12.";
             };
             
-            
+
             ?>
           </div>
         </div>
@@ -113,12 +121,11 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
             </div>
           </div>
         </div>
+        
+        <?php
+          include __DIR__ . "/footer.php";
+        ?>
 
-        <div class="col my-3">
-          <div class="w-100 mx-auto">
-            <p class="mt-3 text-body-secondary">© 2023</p>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -127,5 +134,14 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
   <script src="js/main.js"></script>
   <!-- Bootstrap JS file -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  
+  <?php
+    // remove all session variables
+    session_unset();
+
+    // destroy the session
+    session_destroy();
+    // header('Location: ./private_area.php');
+  ?>
 </body>
 </html>
