@@ -62,13 +62,13 @@ session_start();
                 <label for="rangeSlider" class="form-label">Seleziona un valore:</label>
                 <input type="range" class="form-range" id="rangeSlider" name="slider" min="2" max="12" value="2">
               </div>
-              <button type="submit" class="btn btn-success mb-2" name="button1" value="Button1">
+              <button type="submit" class="btn btn-success mb-2" name="buttonRedirect" value="Button1">
                 Genera Password
                 <?php
-                  if(array_key_exists('button1', $_GET)) {
-                    button1();
+                  if(key_exists('buttonRedirect', $_GET)) {
+                    buttonRedirect();
                   }
-                  function button1() {
+                  function buttonRedirect() {
                     header('Location: ./private_area.php');
                   }
                 ?>
@@ -135,13 +135,12 @@ session_start();
   <!-- Bootstrap JS file -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
   
-  <?php
+  <!-- <?php
     // remove all session variables
-    session_unset();
+    // session_unset();
 
     // destroy the session
-    session_destroy();
-    // header('Location: ./private_area.php');
-  ?>
+    // session_destroy();
+  ?> -->
 </body>
 </html>

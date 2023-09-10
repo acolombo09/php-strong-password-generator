@@ -21,7 +21,7 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <!-- My css link -->
   <link rel="stylesheet" href="css/style.css">
-  <title>PHP | STRONG PASSWORD GENERATOR</title>
+  <title>STRONG PASSWORD GENERATOR | PRIVATE AREA</title>
 </head>
 <body class="bg-dark bg-opacity-75">
   <div class="container my-5 py-4 bg-body-tertiary shadow-lg">
