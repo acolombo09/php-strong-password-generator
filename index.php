@@ -26,6 +26,19 @@ Dare all’utente anche la possibilità di permettere o meno la ripetizione di c
 
 session_start();
 
+include __DIR__ . "/functions.php";
+
+if (isset($_GET["slider"])) {
+  $sliderValue = $_GET["slider"];
+  $_SESSION["sliderValue"] = $sliderValue;
+  if(key_exists('buttonRedirect', $_GET)) {
+    buttonRedirect();
+  }
+  exit;
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -62,35 +75,11 @@ session_start();
                 <label for="rangeSlider" class="form-label">Seleziona un valore:</label>
                 <input type="range" class="form-range" id="rangeSlider" name="slider" min="2" max="12" value="2">
               </div>
-              <button type="submit" class="btn btn-success mb-2" name="buttonRedirect" value="Button1">
+              <button type="submit" class="btn btn-success mb-3" name="buttonRedirect" value="Button1">
                 Genera Password
-                <?php
-                  if(key_exists('buttonRedirect', $_GET)) {
-                    buttonRedirect();
-                  }
-                  function buttonRedirect() {
-                    header('Location: ./private_area.php');
-                  }
-                ?>
               </button>
             </form>
 
-            <?php
-            
-            include __DIR__ .  "/functions.php";
-
-            $sliderValue = getSliderValue();
-            
-            if ($sliderValue >= 1 && $sliderValue <= 12) {
-              $password = generateRandomPassword($sliderValue);
-
-              echo '<p class="text-primary fw-bold display-6">' . $password . '</p>';
-            } elseif($sliderValue !== null) {
-              echo "Errore: La lunghezza della password deve essere compresa tra 1 e 12.";
-            };
-            
-
-            ?>
           </div>
         </div>
         <div class="col my-3">
@@ -135,12 +124,5 @@ session_start();
   <!-- Bootstrap JS file -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
   
-  <!-- <?php
-    // remove all session variables
-    // session_unset();
-
-    // destroy the session
-    // session_destroy();
-  ?> -->
 </body>
 </html>

@@ -1,6 +1,10 @@
 <?php
 
-session_start();
+  session_start();
+
+  include __DIR__ . "/functions.php";
+
+  $sliderValue = $_SESSION["sliderValue"] ?? null;
 
 ?>
 
@@ -32,9 +36,27 @@ session_start();
         </div>
         <div class="col my-3 bg-success bg-opacity-25">
           <div class="w-50 mx-auto d-flex flex-column justify-content-center align-items-center text-center">
+            <div class="w-100 mx-auto mt-3">
+            <p class="fw-bold">Valore selezionato:</p>
+              <?php
+                if (isset($_SESSION["sliderValue"])) {
+                  echo '<p class="text-primary fw-bold display-6">' . $_SESSION["sliderValue"] . '</p>';
+                }
+              ?>
+            </div>
             <div class="w-100 mx-auto">
               <p class="fw-bold">Password casuale generata:</p>
+              <?php
+                if (isset($sliderValue) && $sliderValue >= 1 && $sliderValue <= 12) {
+                  $password = generateRandomPassword($sliderValue);
+                  echo '<p class="text-primary fw-bold display-6">' . $password . '</p>';
+                } else {
+                  echo '<p class="text-danger">Errore: La lunghezza della password deve essere compresa tra 1 e 12.</p>';
+                  exit; // Esci in caso di errore.
+                }
+                ?>
             </div>
+            
           </div>
           <?php
             include __DIR__ . "/footer.php";
@@ -45,17 +67,20 @@ session_start();
   </div>
 
   <?php
-    // remove all session variables
-    session_unset();
-
-    // destroy the session
-    session_destroy();
+  
   ?>
 
   <!-- My JS file -->
   <script src="js/main.js"></script>
   <!-- Bootstrap JS file -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  
+  <?php
+  // remove all session variables
+  session_unset();
 
+  // destroy the session
+  session_destroy();
+  ?>
 </body>
 </html>
